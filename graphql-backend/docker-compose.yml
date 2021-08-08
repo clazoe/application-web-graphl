@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  api:
+    build: ./graphql-api
+    volumes:
+      - ./graphql-api:/graphql-api
+    entrypoint: sh "/graphql-api/init.sh"
+    ports:
+      - 8008:8000
+    depends_on:
+      - db
+ # migration:
+ #   build: .
+ #   command: orator migrate -c db.py -y
+ #   volumes:
+ #     - ./fastapi-graphql:/app
+ #   links:
+ #     - db
+ #   depends_on:
+ #     - db
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=graphql_db_test
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
