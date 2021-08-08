@@ -1,1 +1,1 @@
-# application-web-graphl
+# application-web-graphql
